@@ -71,16 +71,13 @@ function testCaseFormatter(data: TestCaseResponse, project: string): string {
     preconditions: (preconditions: TestCaseResponse['preconditions']): string | undefined =>
       preconditions?.map(({condition}) => `- ${condition}`).join('\n'),
 
-    title: (testcase: TestCaseResponse, project: string) => `${project}-${testcase.id}. ${testcase.title}`,
-    testcaseBlock: (data: string) => `<TestcaseBlock>\n${data}\n<TestcaseBlock/>`
+    title: (testcase: TestCaseResponse, project: string) => `${project}-${testcase.id}. ${testcase.title}`
   };
 
-  return f.testcaseBlock(
-    `Title: ${f.title(data, project)}\n` +
+  return `Title: ${f.title(data, project)}\n` +
     `Description: ${data.description}\n\n` +
     `Preconditions:\n${f.preconditions(data.preconditions)}\n\n` +
-    `Steps:\n${f.steps(data.steps)}`
-  );
+    `Steps:\n${f.steps(data.steps)}`;
 }
 
 function sleep(ms: number): Promise<void> {
