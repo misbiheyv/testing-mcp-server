@@ -5,7 +5,9 @@ import type {ListResourcesCallback, McpServer} from '@modelcontextprotocol/sdk/s
 import {getTestCase, getTestCasesList} from '../../tms/index.js';
 import {readFileSync} from '../../fs/index.js';
 
-export const testingDocsResource = (server: McpServer) => server.resource(
+import type {RegisterFn} from '../interface.js';
+
+const testingDocsResource = (server: McpServer) => server.resource(
   'testing-docs',
   'docs://testing-docs',
   {
@@ -20,7 +22,7 @@ export const testingDocsResource = (server: McpServer) => server.resource(
   })
 );
 
-export const testcaseResource = async (server: McpServer) => server.resource(
+const testcaseResource = async (server: McpServer) => server.resource(
   'testcase',
   new ResourceTemplate(
     'testcase://projects/{project}/test-cases/{id}',
@@ -75,3 +77,5 @@ function testcaseResourceList(projects: string[]): ListResourcesCallback {
     }
   }
 };
+
+export const registerFns: RegisterFn[] = [testcaseResource];

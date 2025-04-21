@@ -1,7 +1,10 @@
 import {z} from 'zod';
 import type {McpServer} from '@modelcontextprotocol/sdk/server/mcp.js';
+
 import {getTestCase} from '../../tms/index.js';
 import {readFileSync} from '../../fs/index.js';
+
+import type {RegisterFn} from '../interface.js';
 
 /**
  * Промпт для {@link createTestTool}
@@ -18,7 +21,7 @@ const createPrompt = (testFilePath: string) => `
 const generateTestFromTmsPrompt = (
   {testcaseContent, file, docs}: {testcaseContent: string, file: string, docs: string}
 ) => `
-Прочитай файл ${file} и на месте блока TestBlock напиши тест, следуя шагам из тесткейса:
+Прочитай файл ${file} и напиши тест, следуя шагам из тесткейса:
 ${testcaseContent}
 Перед написанием теста, изучи документацию и стайлгайд по написанию тестов и следуй им:
 ${docs}
@@ -27,7 +30,7 @@ ${docs}
 Не изменяй остальные тесты.
 `;
 
-export const createTestTool = (server: McpServer) => server.tool(
+const createTestTool = (server: McpServer) => server.tool(
   'create_test',
   'Принимает путь до файла, где необходимо написать тест. Возвращает промпт-инструкцию, которой агент будет следовать для дальнейшего написания теста.',
   {
@@ -41,7 +44,7 @@ export const createTestTool = (server: McpServer) => server.tool(
   })
 );
 
-export const getTestcaseTool = (server: McpServer) => server.tool(
+const getTestcaseTool = (server: McpServer) => server.tool(
   'get_testcase',
   'Принимает путь до тесткейса из TMS. Возвращает запрошенный тесткейс в текстовом формате.',
   {
@@ -72,7 +75,7 @@ export const getTestcaseTool = (server: McpServer) => server.tool(
   }
 );
 
-export const generateTestFromTmsTool = (server: McpServer) => server.tool(
+const generateTestFromTmsTool = (server: McpServer) => server.tool(
   'generate_test_from_tms',
   'Генерирует тест в указанном файле по переданному тесткейсу из TMS',
   {
@@ -104,3 +107,5 @@ export const generateTestFromTmsTool = (server: McpServer) => server.tool(
     }
   }
 );
+
+export const registerFns: RegisterFn[] = [generateTestFromTmsTool];

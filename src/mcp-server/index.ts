@@ -5,9 +5,9 @@ import type {ServerOptions} from '@modelcontextprotocol/sdk/server/index.js';
 
 import pkg from '../../package.json' with {type: 'json'};
 
-import * as tools from './tools/index.js';
-import * as resources from './resources/index.js';
-import * as prompts from './prompts/index.js';
+import {registerFns as tools} from './tools/index.js';
+import {registerFns as resources} from './resources/index.js';
+import {registerFns as prompts} from './prompts/index.js';
 
 export async function startServer(info: Partial<Implementation> = {}, opts: Partial<ServerOptions> = {}) {
   const server = new McpServer({
